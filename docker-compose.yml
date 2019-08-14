@@ -1,0 +1,23 @@
+version: '3.4'
+
+services:
+  dataapidocker:
+    image: ${DOCKER_REGISTRY-}dataapidocker
+    build:
+      context: .
+      dockerfile: DataAPIDocker/Dockerfile
+    environment:
+      - DB_PW
+    depends_on:
+      - db
+  db:
+    image: mcr.microsoft.com/mssql/server
+    volumes:
+      - mssql-server-julie-data:/var/opt/mssql/data
+    environment:
+      SA_PASSWORD: "${DB_PW}"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+volumes:
+  mssql-server-julie-data: {}
